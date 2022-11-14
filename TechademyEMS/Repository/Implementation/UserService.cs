@@ -14,12 +14,19 @@ namespace TechademyEMS.Repository.Implementation
 
         public string GetMyName()
         {
-            var result = string.Empty;
-            if (_httpContextAccessor.HttpContext != null)
+            try
             {
-                result = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+                var result = string.Empty;
+                if (_httpContextAccessor.HttpContext != null)
+                {
+                    result = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+                }
+                return result;
             }
-            return result;
+            catch
+            {
+                return string.Empty;
+            }
         }
     }
 }

@@ -15,7 +15,6 @@ namespace TechademyEMS.DatabaseContext
     {
         public EMSDbContext(DbContextOptions<EMSDbContext> options) : base(options)
         {
-
         }
 
         public virtual DbSet<Employee> Employees { get; set; }
@@ -24,7 +23,7 @@ namespace TechademyEMS.DatabaseContext
         public virtual DbSet<Designation> Designations { get; set; }    
         public virtual DbSet<Register> Register { get; set; }   
         public virtual DbSet<PaymentRules> PaymentRules { get; set; }
-        //public virtual DbSet<User> Users { get; set; }
+        
 
     }
 }

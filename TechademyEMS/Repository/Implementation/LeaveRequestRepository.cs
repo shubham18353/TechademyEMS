@@ -68,11 +68,18 @@ namespace TechademyEMS.Repository.Implementation
 
         public LeaveRequest GetById(int id)
         {
-            var request = _context.LeaveRequests.Find(id);
-            if (request != null)
-                return request;
-            else
-                throw new Exception("LeaveRequest Id mismatch!");
+            try
+            {
+                var request = _context.LeaveRequests.Find(id);
+                if (request != null)
+                    return request;
+                else
+                    throw new Exception("LeaveRequest Id mismatch!");
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public LeaveRequest Update(AddLeaveRequest request, int id)

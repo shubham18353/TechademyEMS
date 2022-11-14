@@ -33,6 +33,7 @@ namespace TechademyEMS.Controllers
         {
             try
             {
+                //Log.Information("Designation GetAll method triggered");
                 return Ok(_designationRepository.GetAll());
             }
             catch

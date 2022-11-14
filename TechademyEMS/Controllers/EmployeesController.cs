@@ -33,8 +33,14 @@ namespace TechademyEMS.Controllers
         [HttpGet]
         public IActionResult GetEmployees()
         {
-
-            return Ok(_employeeRepository.GetAll());
+            try
+            {
+                return Ok(_employeeRepository.GetAll());
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET: api/Employees/5

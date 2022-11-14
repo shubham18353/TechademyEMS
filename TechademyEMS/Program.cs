@@ -1,3 +1,4 @@
+global using Serilog;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using TechademyEMS.DatabaseContext;
 using TechademyEMS.Models.Authorization;
 using TechademyEMS.Repository.Implementation;
 using TechademyEMS.Repository.Interface;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,16 +25,19 @@ builder.Services.AddCors(Options => Options.AddPolicy(name: "EMSOrigins", policy
 {
     policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader();
 }));
+// Injecting Dependencies
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IDesignationRepository,DesignationRepository>();
 builder.Services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
 builder.Services.AddScoped<IPaymentRulesRepository, PaymentRulesRepository>();
 builder.Services.AddScoped<IWorkingHoursRepository, WorkingHoursRepository>();
+//Adding Identity
 builder.Services.AddIdentity<Register, IdentityRole>(options =>
 {
     options.User.RequireUniqueEmail = false;
     
 }).AddEntityFrameworkStores<EMSDbContext>().AddDefaultUI();
+//JWT Authentication Service
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -45,6 +50,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
+//Initialising Logger
+var logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).Enrich.FromLogContext().CreateLogger();
+    //.WriteTo.File("E:\\CA\\TechademyEMS\\logs\\ApiLog.log", rollingInterval: RollingInterval.Day).CreateLogger();
+builder.Logging.AddSerilog(logger);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -72,11 +72,18 @@ namespace TechademyEMS.Repository.Implementation
 
         public Employee GetById(int id)
         {
-            var employee = _context.Employees.Find(id);
-            if (employee != null)
-                return employee;
-            else
-                throw new Exception("Employee Id mismatch! ");
+            try
+            {
+                var employee = _context.Employees.Find(id);
+                if (employee != null)
+                    return employee;
+                else
+                    throw new Exception("Employee Id mismatch! ");
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public Employee UpdateEmployee(AddEmployeeRequest emp,int id)

@@ -68,11 +68,18 @@ namespace TechademyEMS.Repository.Implementation
 
         public Designation GetById(int id)
         {
-            var des = _context.Designations.Find(id);
-            if (des != null)
-                return des;
-            else
-                throw new Exception("Designation Id mismatch! ");
+            try
+            {
+                var des = _context.Designations.Find(id);
+                if (des != null)
+                    return des;
+                else
+                    throw new Exception("Designation Id mismatch! ");
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public Designation Update(AddDesignationRequest des,int id)

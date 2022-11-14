@@ -20,14 +20,21 @@ namespace TechademyEMS.Controllers
        
         public async Task<Object> GetProfile()
         {
-            string userId=User.Claims.First(x=>x.Type=="UserId").Value;
-            var user = await userManager.FindByNameAsync(userId);
-            return new
+            try
             {
-                user.FullName,
-                user.Email,
-                user.UserName
-            };
+                string userId = User.Claims.First(x => x.Type == "UserId").Value;
+                var user = await userManager.FindByNameAsync(userId);
+                return new
+                {
+                    user.FullName,
+                    user.Email,
+                    user.UserName
+                };
+            }
+            catch
+            {
+                return BadRequest(GetProfile());
+            }
         }
     }
 }

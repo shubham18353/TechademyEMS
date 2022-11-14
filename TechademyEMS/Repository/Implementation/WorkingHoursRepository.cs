@@ -67,11 +67,18 @@ namespace TechademyEMS.Repository.Implementation
 
         public WorkingHours GetById(int id)
         {
-            var hours = _context.WorkHours.Find(id);
-            if (hours != null)
-                return hours;
-            else
-                throw new Exception("Working Hours mismatch! ");
+            try
+            {
+                var hours = _context.WorkHours.Find(id);
+                if (hours != null)
+                    return hours;
+                else
+                    throw new Exception("Working Hours mismatch! ");
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public WorkingHours Update(AddWorkingHours hours, int id)

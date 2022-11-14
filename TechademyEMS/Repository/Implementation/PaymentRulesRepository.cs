@@ -68,11 +68,18 @@ namespace TechademyEMS.Repository.Implementation
 
         public PaymentRules GetById(int id)
         {
-            var request = _context.PaymentRules.Find(id);
-            if (request != null)
-                return request;
-            else
-                throw new Exception("Payment Rules Id mismatch!");
+            try
+            {
+                var request = _context.PaymentRules.Find(id);
+                if (request != null)
+                    return request;
+                else
+                    throw new Exception("Payment Rules Id mismatch!");
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public PaymentRules Update(PaymentRulesRequest request, int id)

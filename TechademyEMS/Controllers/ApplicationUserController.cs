@@ -50,26 +50,33 @@ namespace TechademyEMS.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login(Login login)
         {
-            var user = await userManager.FindByNameAsync(login.Username);
-            if(user != null && await userManager.CheckPasswordAsync(user,login.Password))
+            try
             {
-                var tokenDescriptor = new SecurityTokenDescriptor
+                var user = await userManager.FindByNameAsync(login.Username);
+                if (user != null && await userManager.CheckPasswordAsync(user, login.Password))
                 {
-                    Subject = new ClaimsIdentity(new Claim[]
+                    var tokenDescriptor = new SecurityTokenDescriptor
                     {
+                        Subject = new ClaimsIdentity(new Claim[]
+                        {
                         new Claim("UserId", user.Id.ToString())
-                    }),
-                    Expires = DateTime.UtcNow.AddDays(1),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("my top secret key")),SecurityAlgorithms.HmacSha256Signature)
-                };
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var securityToken=tokenHandler.CreateToken(tokenDescriptor);
-                var token=tokenHandler.WriteToken(securityToken);
-                return Ok(new { token });
+                        }),
+                        Expires = DateTime.UtcNow.AddDays(1),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("my top secret key")), SecurityAlgorithms.HmacSha256Signature)
+                    };
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var securityToken = tokenHandler.CreateToken(tokenDescriptor);
+                    var token = tokenHandler.WriteToken(securityToken);
+                    return Ok(new { token });
+                }
+                else
+                {
+                    return BadRequest(new { Message = "UserName or Password Incorrect!" });
+                }
             }
-            else
+            catch(Exception ex)
             {
-                return BadRequest(new { Message = "UserName or Password Incorrect!" });
+                return BadRequest(ex.Message); 
             }
         }
     }
